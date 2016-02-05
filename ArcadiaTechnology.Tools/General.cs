@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ArcadiaTechnology.Tools
@@ -31,10 +32,10 @@ namespace ArcadiaTechnology.Tools
                 throw new ArgumentNullException("addressList", "addressList is null.");
 
             // Extract emails, skipping blank entries
-            string[] emails = addressList.Split(new char[] { ' ', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var emails = addressList.Split(new char[] { ' ', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Retrieve the valid emails.
-            string[] result = Array.FindAll<string>(emails, ValidationTool.IsValidEmail);
+            var result = emails.Where(e => ValidationTool.IsValidEmail(e)).ToArray();
 
             return result;
         }
@@ -48,24 +49,18 @@ namespace ArcadiaTechnology.Tools
         /// </remarks>
         public static void SplitEmails()
         {
-            string addressList = "kip@abc; joe.bloggs@mac.com ,  bob.jones@xyz.net, abc.co.uk;a.jones@recfirst.com";
+            var addressList = "kip@abc; joe.bloggs@mac.com ,  bob.jones@xyz.net, abc.co.uk;a.jones@recfirst.com";
 
             // Extract emails, skipping blank entries
-            string[] emails = addressList.Split(new char[] { ' ', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var emails = addressList.Split(new char[] { ' ', ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Print the valid emails.
-            string[] validEmails = Array.FindAll<string>(emails, ValidationTool.IsValidEmail);
-            foreach (string validEmail in validEmails)
-            {
-                Console.WriteLine("Valid Email = " + validEmail);
-            }
+            var validEmails = emails.Where(e => ValidationTool.IsValidEmail(e)).ToList();
+            validEmails.ForEach(e => Console.WriteLine("Valid Email = " + e));
 
             // Print the invalid emails
-            string[] invalidEmails = Array.FindAll<string>(emails, ValidationTool.IsInvalidEmail);
-            foreach (string invalidEmail in invalidEmails)
-            {
-                Console.WriteLine("Invalid Email = " + invalidEmail);
-            }
+            var invalidEmails = emails.Where(e => ValidationTool.IsInvalidEmail(e)).ToList();
+            invalidEmails.ForEach(e => Console.WriteLine("Invalid Email = " + e));
         }
 
         /// <summary>
@@ -87,21 +82,6 @@ namespace ArcadiaTechnology.Tools
 
             return result;
         }
-
-        /// <summary>
-        /// Writes the text representation of the specified object,
-        /// followed by the current line terminator, to the standard output stream.
-        /// </summary>
-        /// <typeparam name="T">The type of the object.</typeparam>
-        /// <param name="t">The object to write.</param>
-        /// <remarks>The object is a reference or value type.
-        /// Override <c>ToString()</c> if necessary to obtain meaningful output.
-        /// </remarks>
-        public static void WriteLine<T>(T t)
-        {
-            Console.WriteLine(t);
-        }
-
         #endregion Methods
     }
 }

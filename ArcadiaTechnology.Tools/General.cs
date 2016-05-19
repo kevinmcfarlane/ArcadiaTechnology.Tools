@@ -82,6 +82,22 @@ namespace ArcadiaTechnology.Tools
 
             return result;
         }
+
+        /// <summary>
+        /// Converts the string to a unique identifier or null Guid if the string was null, empty or not a valid Guid string.
+        /// </summary>
+        /// <remarks>A null or empty string may correspond to, say, an empty selection in a dropdown; so could be expected.</remarks>
+        /// <param name="guidString">The unique identifier string.</param>
+        /// <returns>
+        /// The string converted to a unique identifier.
+        /// </returns>
+        public static Guid? ConvertStringToGuid(string guidString)
+        {
+            Guid guid = Guid.Empty;
+            Guid? result = Guid.TryParse(guidString, out guid) ? guid : default(Guid?);
+
+            return result;
+        }
         #endregion Methods
     }
 }

@@ -2,7 +2,7 @@
 
 A toolbox of .NET utilities for various tasks. 
 
-Some of this code was written prior to .NET 3.5. It did not initially use Nuget, so references to NUnit and SpecFlow are local. (SpecFlow uses v1.8. v2.0 was released recently and may not be compatible.)
+The SpecFlow version used is 1.8. Version 2.0 was released in January 2016.
 
 ### Tech
 

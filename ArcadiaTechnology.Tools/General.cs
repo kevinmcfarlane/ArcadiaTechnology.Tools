@@ -98,6 +98,28 @@ namespace ArcadiaTechnology.Tools
 
             return result;
         }
+
+        /// <summary>
+        /// Ensures the generic type is an Enum and not some other value type.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the <see cref="Enum"/>.</typeparam>
+        /// <exception cref="System.InvalidOperationException">
+        /// Expected System.Enum but was some other <c>value type</c>, such as <c>int</c>.
+        /// </exception>
+        /// <remarks>
+        /// It is not possible to use an enum as a generic type parameter. This is a workaround.
+        /// 
+        /// Using enum as generic type parameter in C# - Stack Overflow
+        /// <see href="http://stackoverflow.com/questions/6438352/using-enum-as-generic-type-parameter-in-c-sharp" />
+        /// </remarks>
+        public static void EnsureGenericTypeIsEnum<TEnum>()
+            where TEnum : struct, IComparable, IConvertible, IFormattable
+        {
+            if (!typeof(TEnum).IsEnum)
+            {
+                throw new InvalidOperationException(string.Format("Expected {0} but was {1}.", typeof(Enum), typeof(TEnum)));
+            }
+        }
         #endregion Methods
     }
 }

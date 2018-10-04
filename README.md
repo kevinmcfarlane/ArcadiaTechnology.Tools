@@ -1,3 +1,7 @@
+[![Build Status](https://kevinmcfarlane.visualstudio.com/GitHub%20Integration/_apis/build/status/kevinmcfarlane.ArcadiaTechnology.Tools)](https://kevinmcfarlane.visualstudio.com/GitHub%20Integration/_build/latest?definitionId=3)
+
+![Azure Pipelines Build](Images/AzurePipelinesBuild.png)
+
 # .NET Utilities
 
 A toolbox of .NET utilities for various tasks. 

@@ -1,12 +1,10 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using ArcadiaTechnology.Tools;
-using System.Collections.ObjectModel;
-using System.Collections.Concurrent;
 
 namespace ArcadiaTechnology.Tools.Tests
 {
@@ -91,7 +89,7 @@ namespace ArcadiaTechnology.Tools.Tests
         /// </summary>
         /// <remarks>
         /// We compare bags because the array can contain duplicates and the generated results will 
-        /// be in a different order to the original array enrties.
+        /// be in a different order to the original array entries.
         /// </remarks>
         [Test]
         public void ShouldReturnEquivalentBagToNumberArray()

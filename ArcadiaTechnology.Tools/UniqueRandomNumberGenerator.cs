@@ -35,8 +35,8 @@ namespace ArcadiaTechnology.Tools
     {
         #region Fields
 
-        private Random rand = new Random();
-        private List<int> remainingNumbers = new List<int>();
+        private Random _rand = new Random();
+        private List<int> _remainingNumbers = new List<int>();
 
         #endregion Fields
 
@@ -49,7 +49,7 @@ namespace ArcadiaTechnology.Tools
         /// <remarks>
         /// The range may contain duplicates. See summary for <see cref="UniqueRandomNumberGenerator"></see> class.
         /// </remarks>
-        /// <exception cref="System.ArgumentNullException"><paramref name="numbers" /> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="numbers" /> is null.</exception>
         /// <param name="numbers">The range of numbers.</param>
         public UniqueRandomNumberGenerator(IEnumerable<int> numbers)
         {
@@ -57,9 +57,9 @@ namespace ArcadiaTechnology.Tools
             {
                 throw new ArgumentNullException("numbers", "numbers is null.");
             }
-            this.remainingNumbers.AddRange(numbers);
+            _remainingNumbers.AddRange(numbers);
 
-            this.TraceRange();
+            TraceRange();
         }
 
         /// <summary>
@@ -70,21 +70,21 @@ namespace ArcadiaTechnology.Tools
         /// If the client specifies a minimum number of 3 and a maximum number of 9 then internally
         /// the instance generates the range: {3, 4, 5, 6, 7, 8, 9} from which the random number is generated.
         /// </remarks>
-        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="minNumber" /> is greater than <paramref name="maxNumber" />.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minNumber" /> is greater than <paramref name="maxNumber" />.</exception>
         /// <param name="minNumber">The minimum number in the range.</param>
         /// <param name="maxNumber">The maximum number in the range.</param>
         public UniqueRandomNumberGenerator(int minNumber, int maxNumber)
         {
-            Debug.Assert(maxNumber >= minNumber, String.Format("Min Value is {0}, it must not be greater than the Max Value {1}.", minNumber, maxNumber));
+            Debug.Assert(maxNumber >= minNumber, $"Min Value is {minNumber}, it must not be greater than the Max Value {maxNumber}.");
 
             if (minNumber > maxNumber)
             {
                 throw new ArgumentOutOfRangeException("minNumber", minNumber, "minNumber is greater than the maxNumber.");
             }
 
-            this.CreateIncreasingConsecutiveNumberRange(minNumber, maxNumber);
+            CreateIncreasingConsecutiveNumberRange(minNumber, maxNumber);
 
-            this.TraceRange();
+            TraceRange();
         }
 
         #endregion Constructors
@@ -95,12 +95,12 @@ namespace ArcadiaTechnology.Tools
         /// Gets the count of remaining numbers from which a new random number will be generated.
         /// </summary>
         /// <remarks>
-        /// Clients should check this prior to calls to <seealso cref="UniqueRandomNumberGenerator.NewRandomNumber"/>.
+        /// Clients should check this prior to calls to <seealso cref="NewRandomNumber"/>.
         /// </remarks>
         /// <value>The remaining numbers count.</value>
         public int RemainingNumbersCount
         {
-            get { return this.remainingNumbers.Count; }
+            get { return _remainingNumbers.Count; }
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace ArcadiaTechnology.Tools
         /// <value>The remaining numbers array.</value>
         public ReadOnlyCollection<int> RemainingNumbers
         {
-            get { return this.remainingNumbers.AsReadOnly(); }
+            get { return _remainingNumbers.AsReadOnly(); }
         }
 
         #endregion Properties
@@ -119,22 +119,21 @@ namespace ArcadiaTechnology.Tools
         /// <summary>
         /// Generates a new random number from the range of numbers initially supplied to the instance (see class summary for description of how this works).
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException"><see cref="UniqueRandomNumberGenerator.RemainingNumbersCount"/> = 0.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="RemainingNumbersCount"/> = 0.</exception>
         /// <returns>The number stored at the randomly selected range index.</returns>
         public int NewRandomNumber()
         {
-            Debug.Assert(this.RemainingNumbersCount > 0, String.Format("The count of remaining numbers is {0}, it must be at least 1.", this.RemainingNumbersCount));
+            Debug.Assert(RemainingNumbersCount > 0, $"The count of remaining numbers is {RemainingNumbersCount}, it must be at least 1.");
 
             // Generate a random index from the list of remaining numbers
-            int maxIndex = this.remainingNumbers.Count - 1;
-            int index = this.rand.Next(0, maxIndex + 1);
+            int maxIndex = _remainingNumbers.Count - 1;
+            int index = _rand.Next(0, maxIndex + 1);
 
             // Get the number at that index
-            int number = this.remainingNumbers[index];
-            //Debug.WriteLine(String.Format("Number = {0} at randomly selected index = {1}", number, index));
+            int number = _remainingNumbers[index];
 
             // Now remove it so it can't be generated again
-            this.remainingNumbers.RemoveAt(index);
+            _remainingNumbers.RemoveAt(index);
 
             return number;
         }
@@ -145,7 +144,7 @@ namespace ArcadiaTechnology.Tools
 
             while (currentEntry <= maxNumber)
             {
-                this.remainingNumbers.Add(currentEntry);
+                _remainingNumbers.Add(currentEntry);
                 currentEntry++;
             }
         }
@@ -153,8 +152,8 @@ namespace ArcadiaTechnology.Tools
         private void TraceRange()
         {
             Debug.WriteLine("Random Number List");
-            this.remainingNumbers.ForEach(value => Debug.Write(String.Format("{0} ", value)));
-            Debug.WriteLine(String.Empty);
+            _remainingNumbers.ForEach(value => Debug.Write($"{value} "));
+            Debug.WriteLine(string.Empty);
         }
 
         #endregion Methods

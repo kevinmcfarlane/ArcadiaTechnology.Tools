@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
@@ -43,8 +42,8 @@ namespace ArcadiaTechnology.Tools.Tests
         [Test]
         public void ShouldReturnNumberInSingleNumberArray()
         {
-            int[] numbers = new int[] { 1 };
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(numbers);
+            var numbers = new int[] { 1 };
+            var g = new UniqueRandomNumberGenerator(numbers);
 
             int number = 0;
             
@@ -68,7 +67,7 @@ namespace ArcadiaTechnology.Tools.Tests
             int minNumber = 2;
             int maxNumber = 2;
 
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
+            var g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
 
             int number = 0;
             
@@ -85,7 +84,7 @@ namespace ArcadiaTechnology.Tools.Tests
 
         /// <summary>
         /// Selects numbers at random from the original array until the entire range is exhausted.
-        /// The <seealso cref="Wintellect.PowerCollections.Bag" /> of results should equal the bag corresponding to the original array.
+        /// The <seealso cref="ConcurrentBag" /> of results should equal the bag corresponding to the original array.
         /// </summary>
         /// <remarks>
         /// We compare bags because the array can contain duplicates and the generated results will 
@@ -94,11 +93,11 @@ namespace ArcadiaTechnology.Tools.Tests
         [Test]
         public void ShouldReturnEquivalentBagToNumberArray()
         {
-            int[] numbers = new int[] { 1, 2, 3, 4, 3, 6, 4, 8, 17, 42, 6 };
-            ConcurrentBag<int> expected = new ConcurrentBag<int>(numbers);
-            ConcurrentBag<int> actual = new ConcurrentBag<int>();
+            var numbers = new int[] { 1, 2, 3, 4, 3, 6, 4, 8, 17, 42, 6 };
+            var expected = new ConcurrentBag<int>(numbers);
+            var actual = new ConcurrentBag<int>();
 
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(numbers);
+            var g = new UniqueRandomNumberGenerator(numbers);
 
             while (g.RemainingNumbersCount > 0)
             {
@@ -117,20 +116,20 @@ namespace ArcadiaTechnology.Tools.Tests
         [Test]
         public void ShouldReturnProperSubsetOfNumberArray()
         {
-            int[] numbers = new int[] { 1, 2, 3, 4, 3, 6, 4, 8, 17, 42, 6 };
-            ConcurrentBag<int> initialBag = new ConcurrentBag<int>(numbers);
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(numbers);
+            var numbers = new int[] { 1, 2, 3, 4, 3, 6, 4, 8, 17, 42, 6 };
+            var initialBag = new ConcurrentBag<int>(numbers);
+            var g = new UniqueRandomNumberGenerator(numbers);
             const int GeneratedRandomNumberCount = 3;
 
             // Sanity check on test data
             Debug.Assert(
                 GeneratedRandomNumberCount < initialBag.Count,
-                String.Format("The generated random number count {0} must be less than the count of initial numbers {1} for this test.", GeneratedRandomNumberCount, initialBag.Count));
+                $"The generated random number count {GeneratedRandomNumberCount} must be less than the count of initial numbers {initialBag.Count} for this test.");
 
             Debug.WriteLine("Random Numbers");
             int number = 0;
 
-            ConcurrentBag<int> actualBag = new ConcurrentBag<int>();
+            var actualBag = new ConcurrentBag<int>();
 
             for (int i = 1; i <= GeneratedRandomNumberCount; i++)
             {
@@ -138,8 +137,8 @@ namespace ArcadiaTechnology.Tools.Tests
                 actualBag.Add(number);
             }
 
-            HashSet<int> initialSet = new HashSet<int>(initialBag.AsEnumerable());
-            HashSet<int> actualSet = new HashSet<int>(actualBag.AsEnumerable());
+            var initialSet = new HashSet<int>(initialBag.AsEnumerable());
+            var actualSet = new HashSet<int>(actualBag.AsEnumerable());
 
             Assert.IsTrue(
                 actualSet.IsProperSubsetOf(initialSet),
@@ -155,22 +154,22 @@ namespace ArcadiaTechnology.Tools.Tests
             int minNumber = 3;
             int maxNumber = 15;
 
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
+            var g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
 
-            ReadOnlyCollection<int> numbers = g.RemainingNumbers;
-            HashSet<int> initialSet = new HashSet<int>(numbers);
+            var numbers = g.RemainingNumbers;
+            var initialSet = new HashSet<int>(numbers);
 
             const int GeneratedRandomNumberCount = 3;
 
             // Sanity check on test data
             Debug.Assert(
                 GeneratedRandomNumberCount < initialSet.Count,
-                String.Format("The generated random number count {0} must be less than the count of initial numbers {1} for this test.", GeneratedRandomNumberCount, initialSet.Count));
+                $"The generated random number count {GeneratedRandomNumberCount} must be less than the count of initial numbers {initialSet.Count} for this test.");
 
             Debug.WriteLine("Random Numbers");
             int number = 0;
 
-            HashSet<int> actual = new HashSet<int>();
+            var actual = new HashSet<int>();
             for (int i = 1; i <= GeneratedRandomNumberCount; i++)
             {
                 number = g.NewRandomNumber();
@@ -192,7 +191,7 @@ namespace ArcadiaTechnology.Tools.Tests
             int minNumber = 3;
             int maxNumber = 2;
 
-            UniqueRandomNumberGenerator g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
+            var g = new UniqueRandomNumberGenerator(minNumber, maxNumber);
         }
     }
 }
